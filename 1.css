@@ -1,0 +1,23 @@
+#header {height:150px;background-color:#EAC100;z-index:99999;}
+#article {height:450px;background-image:url("2160x.png");background-size:cover;z-index:99999;background-repeat:no-repeat;background-position:center;}
+#footer {height:50px;background-color:#EAC100;z-index: 99999;bottom:0;
+	left: 0;width: 100%;}
+body{margin:0;}
+h1{font-size:80px;
+color:black;
+text-align:center;margin: 0}
+#p1{font-size:20px;
+color:black;
+text-align:right;margin: 0}
+p{font-size:20px;
+color:black;
+text-align:center;margin: 0}
+a{font-size: 20px;
+text-align: center;
+}
+a:link{color:#FFED97;}
+a:visited{color:#408080;}
+a:hover{color:#D2E9FF;}
+a:active{color:#007979;}
+
+
