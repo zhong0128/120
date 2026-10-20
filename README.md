@@ -1,0 +1,85 @@
+[123456.html](https://github.com/user-attachments/files/33691266/123456.html)
+import math
+
+def calculate_mean(data):
+    """計算平均值"""
+    return sum(data) / len(data)
+
+def simple_linear_regression(x, y):
+    """
+    建立簡單線性迴歸模型 (y = beta0 + beta1 * x)
+    完全不使用外部函式庫 (NumPy, Pandas, scikit-learn)
+    """
+    n = len(x)
+    if n != len(y) or n < 3:
+        raise ValueError("x 與 y 的資料長度必須一致，且筆數需至少 3 筆")
+
+    # 1. 計算平均值
+    x_mean = calculate_mean(x)
+    y_mean = calculate_mean(y)
+
+    # 2. 計算斜率 (beta1) 與 截距 (beta0)
+    numerator = sum((x[i] - x_mean) * (y[i] - y_mean) for i in range(n))
+    denominator = sum((x[i] - x_mean) ** 2 for i in range(n))
+
+    if denominator == 0:
+        raise ValueError("x 的變異數為 0，無法建立迴歸模型")
+
+    beta1 = numerator / denominator
+    beta0 = y_mean - beta1 * x_mean
+
+    # 3. 計算預測值與各項平方和 (SST, SSR, SSE)
+    y_pred = [beta0 + beta1 * xi for xi in x]
+    
+    sst = sum((y[i] - y_mean) ** 2 for i in range(n))
+    ssr = sum((y_pred[i] - y_mean) ** 2 for i in range(n))
+    sse = sum((y[i] - y_pred[i]) ** 2 for i in range(n))
+
+    # 4. 計算判定係數 R Square 與 估計標準誤 Standard Error of the Estimate
+    r_squared = ssr / sst if sst != 0 else 0.0
+    
+    # 自由度為 n - 2
+    degrees_of_freedom = n - 2
+    std_error_of_estimate = math.sqrt(sse / degrees_of_freedom)
+
+    return {
+        "beta0": beta0,
+        "beta1": beta1,
+        "r_squared": r_squared,
+        "std_error": std_error_of_estimate,
+        "sst": sst,
+        "ssr": ssr,
+        "sse": sse,
+        "y_pred": y_pred
+    }
+
+def print_model_summary(results):
+    """格式化輸出迴歸模型結果"""
+    print("=" * 50)
+    print("         簡單線性迴歸分析結果 (Model Summary)         ")
+    print("=" * 50)
+    print(f"迴歸方程式 (Equation)               : y = {results['beta0']:.4f} + {results['beta1']:.4f} * x")
+    print(f"截距 (Intercept, β0)                : {results['beta0']:.4f}")
+    print(f"斜率 (Slope, β1)                    : {results['beta1']:.4f}")
+    print("-" * 50)
+    print(f"判定係數 (R Square)                 : {results['r_squared']:.4f}")
+    print(f"估計標準誤 (Std. Error of Estimate) : {results['std_error']:.4f}")
+    print("-" * 50)
+    print(f"總平方和 (SST)                      : {results['sst']:.4f}")
+    print(f"迴歸平方和 (SSR)                    : {results['ssr']:.4f}")
+    print(f"殘差平方和 (SSE)                    : {results['sse']:.4f}")
+    print("=" * 50)
+
+# ---------------------------------------------------------
+# 主程式測試區域
+# ---------------------------------------------------------
+if __name__ == "__main__":
+    # 範例測試資料 (可更換為您自己的數據)
+    x_data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    y_data = [2.1, 3.8, 6.2, 7.9, 10.1, 12.3, 13.9, 16.1, 18.0, 20.2]
+
+    # 執行迴歸計算
+    regression_results = simple_linear_regression(x_data, y_data)
+    
+    # 印出結果
+    print_model_summary(regression_results)
